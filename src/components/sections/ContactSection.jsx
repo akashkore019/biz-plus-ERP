@@ -11,7 +11,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 })
 
-export default function Contact(){
+export default function ContactSection(){
   return (
     <div className="container mx-auto py-16 px-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">

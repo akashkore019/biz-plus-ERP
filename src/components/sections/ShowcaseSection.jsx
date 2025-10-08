@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import showcaseImage1 from '../../assets/images/showcase-1.png'
 
 export default function Showcase() {
   const [expandedIndex, setExpandedIndex] = useState(null)
@@ -38,7 +39,7 @@ export default function Showcase() {
   }
 
   return (
-    <section className="py-16 px-4" style={{ backgroundColor: '#55BEE2' }}>
+    <section className="py-16 px-4" style={{ backgroundColor: '#5dd9ff' }}>
       <div className="container mx-auto">
         {/* BizPlus ERP Text - Horizontal on mobile, Vertical on desktop */}
         <div className="lg:hidden text-center mb-8">
@@ -147,7 +148,7 @@ export default function Showcase() {
                   <div className="rounded-3xl p-8 transition-all duration-500">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                       {/* Left Column - Content */}
-                      <div className="text-white">
+                      <div className="bg-[#5dd9ff] text-white">
                         <h2 className="text-4xl font-bold mb-4" style={{ color: '#00264C' }}>{item.title}</h2>
                         <p className="text-white text-opacity-90 mb-6 leading-relaxed text-lg">
                           {item.description}
@@ -170,9 +171,9 @@ export default function Showcase() {
                       </div>
 
                       {/* Right Column - Image */}
-                      <div className="flex justify-center items-center">
+                      <div className="bg-[#5dd9ff] flex justify-center items-center">
                         <div className="w-full h-80 rounded-2xl overflow-hidden transition-all duration-500" style={{ boxShadow: '10px 10px 10px rgba(0, 0, 0, 0.3)' }}>
-                          {/* Placeholder for image - empty box */}
+                          <img src={showcaseImage1} alt={item.title} className="w-full h-full object-cover" />
                         </div>
                       </div>
                     </div>

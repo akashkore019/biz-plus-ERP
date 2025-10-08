@@ -7,7 +7,9 @@ import ServicesSection from './components/sections/ServicesSection'
 import PricingSection from './components/sections/PricingSection'
 import TestimonialsSection from './components/sections/TestimonialsSection'
 import ContactSection from './components/sections/ContactSection'
-import Showcase from './components/sections/ShowcaseSection'
+import Showcase from './components/sections/Showcase'
+import CallToAction from './components/sections/CallToAction'
+import QuoteSection from './components/sections/QuoteSection'
 
 export default function App() {
   return (
@@ -18,7 +20,9 @@ export default function App() {
         <AboutSection />
         <ServicesSection />
         <PricingSection />
+        <QuoteSection />
         <TestimonialsSection />
+        <CallToAction />
         <Showcase />
         <ContactSection />      
       </main>

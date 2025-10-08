@@ -1,5 +1,5 @@
 import React from 'react'
-import Showcase from '../../components/sections/ShowcaseSection'
+import Showcase from '../../components/sections/Showcase'
 
 export default function Home(){
   return (

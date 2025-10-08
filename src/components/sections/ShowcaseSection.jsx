@@ -40,15 +40,38 @@ export default function Showcase() {
   return (
     <section className="py-16 px-4" style={{ backgroundColor: '#55BEE2' }}>
       <div className="container mx-auto">
+        {/* BizPlus ERP Text - Horizontal on mobile, Vertical on desktop */}
+        <div className="lg:hidden text-center mb-8">
+          <h1 
+            className="text-white font-bold tracking-wider inline-block"
+            style={{ 
+              fontFamily: 'Syncopate, sans-serif',
+              fontSize: 'clamp(2.5rem, 8vw, 4rem)'
+            }}
+          >
+            <span>BizPlus </span>
+            <span 
+              style={{ 
+                WebkitTextStroke: '2px white',
+                WebkitTextFillColor: 'transparent',
+                color: 'transparent'
+              }}
+            >
+              ERP
+            </span>
+          </h1>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Side - BizPlus ERP Text (B at bottom, P at top) */}
-          <div className="lg:col-span-2 flex items-center justify-center lg:justify-start lg:h-full min-h-[600px]">
+          {/* Left Side - BizPlus ERP Text (Vertical - Desktop only) */}
+          <div className="hidden lg:flex lg:col-span-2 items-center justify-start h-full min-h-[600px] pl-0">
             <h1 
-              className="text-white text-8xl lg:text-9xl font-bold tracking-wider transform rotate-180"
+              className="text-white font-bold tracking-wider transform rotate-180"
               style={{ 
                 fontFamily: 'Syncopate, sans-serif', 
                 writingMode: 'vertical-rl',
-                textOrientation: 'mixed'
+                textOrientation: 'mixed',
+                fontSize: 'clamp(4rem, 10vw, 8rem)'
               }}
             >
               <span>
@@ -68,10 +91,21 @@ export default function Showcase() {
           </div>
 
           {/* Right Side - Showcase Items */}
-          <div className="lg:col-span-10 space-y-6">
+          <div className="col-span-1 lg:col-span-10 space-y-6 relative">
+            {/* Vertical Lines Background */}
+            <div className="absolute flex justify-between pointer-events-none z-0" style={{ top: 0, bottom: 0, left: 0, right: 0, height: '100%' }}>
+              {[...Array(8)].map((_, i) => (
+                <div 
+                  key={i} 
+                  className="bg-white"
+                  style={{ width: '1px', height: '100%' }}
+                />
+              ))}
+            </div>
+            
             {/* All Three Items */}
             {showcaseItems.map((item, index) => (
-              <div key={item.id} className="transition-all duration-500">
+              <div key={item.id} className="transition-all duration-500 relative z-10">
                 {expandedIndex === index ? (
                   // Expanded View - Full Width Image with Content Below
                   <div className="rounded-3xl p-8 transition-all duration-500">

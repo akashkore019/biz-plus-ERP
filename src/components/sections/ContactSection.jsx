@@ -13,6 +13,7 @@ L.Icon.Default.mergeOptions({
 
 export default function ContactSection(){
   return (
+    <section id="testimonials" className="py-20">
     <div className="container mx-auto py-16 px-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
         {/* Left Column */}
@@ -69,5 +70,6 @@ export default function ContactSection(){
         </div>
       </div>
     </div>
+    </section>
   );
 }

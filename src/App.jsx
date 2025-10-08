@@ -7,7 +7,7 @@ import ServicesSection from './components/sections/ServicesSection'
 import PricingSection from './components/sections/PricingSection'
 import TestimonialsSection from './components/sections/TestimonialsSection'
 import ContactSection from './components/sections/ContactSection'
-import Showcase from './components/sections/Showcase'
+import Showcase from './components/sections/ShowcaseSection'
 
 export default function App() {
   return (

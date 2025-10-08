@@ -1,100 +1,148 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const plans = [
   {
-    name: "Starter",
+    name: "START",
     price: 19,
     features: [
-      "Basic reporting",
-      "Up to 5 users",
-      "5GB storage",
-      "Email support",
-      "Basic analytics"
+      "2 GB of hosting space",
+      "14 days of free backups",
+      "Social integrations",
+      "Advanced client billing"
     ]
   },
   {
-    name: "Professional",
+    name: "ENTERPRISE",
     price: 49,
     isPopular: true,
     features: [
-      "Advanced reporting",
-      "Up to 20 users",
-      "20GB storage",
-      "Priority support",
-      "Advanced analytics",
-      "Custom dashboards",
-      "API access"
+      "2 GB of hosting space",
+      "14 days of free backups",
+      "Social integrations",
+      "Advanced client billing"
     ]
   },
   {
-    name: "Enterprise",
+    name: "ENTERPRISE",
     price: 99,
     features: [
-      "Custom reporting",
-      "Unlimited users",
-      "Unlimited storage",
-      "24/7 priority support",
-      "Advanced analytics",
-      "Custom dashboards",
-      "API access",
-      "Custom integrations",
-      "Dedicated account manager"
+      "2 GB of hosting space",
+      "14 days of free backups",
+      "Social integrations",
+      "Advanced client billing"
     ]
   }
 ];
 
-function PriceCard({ name, price, features, isPopular }) {
+function PriceCard({ name, price, features, isPopular, isSelected, onClick }) {
+  // Card is dark when selected, or when it's popular AND not another card is selected
+  const isDark = isSelected || (isPopular && !isSelected);
+  
+  // Background color logic
+  let bgColor;
+  if (isSelected) {
+    bgColor = '#00264C'; // Selected card is dark blue
+  } else {
+    bgColor = '#5DD9FF'; // All non-selected cards are cyan
+  }
+  
+  const textColor = isSelected ? 'white' : '#00264C';
+  const borderColor = '#00264C';
+
   return (
-    <div className={`bg-white rounded-xl shadow-lg p-8 relative ${isPopular ? 'border-2 border-blue-500' : ''}`}>
-      {isPopular && (
-        <div className="absolute top-0 right-0 -translate-y-1/2 bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
-          Most Popular
+    <div 
+      className={`rounded-3xl p-8 relative transition-all duration-300 cursor-pointer flex flex-col h-full ${
+        isSelected ? 'transform scale-105' : ''
+      }`}
+      style={{ 
+        backgroundColor: bgColor,
+        border: `2px solid ${borderColor}`
+      }}
+      onClick={onClick}
+    >
+      <div className="text-center mb-6">
+        <h3 className="text-sm font-bold mb-6 tracking-wider" style={{ color: textColor }}>
+          {name}
+        </h3>
+        <div className="flex items-start justify-center mb-2">
+          <span className="text-2xl font-medium mr-1" style={{ color: textColor }}>$</span>
+          <span className="text-6xl font-bold" style={{ color: textColor }}>{price}</span>
         </div>
-      )}
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold mb-2">{name}</h3>
-        <div className="flex items-baseline justify-center">
-          <span className="text-4xl font-bold">${price}</span>
-          <span className="text-gray-500 ml-1">/month</span>
+        <div className="text-sm" style={{ color: isSelected ? 'rgba(255,255,255,0.7)' : '#00264C' }}>
+          per user
+        </div>
+        <div className="text-sm" style={{ color: isSelected ? 'rgba(255,255,255,0.7)' : '#00264C' }}>
+          per month
         </div>
       </div>
-      <ul className="space-y-4 mb-8">
-        {features.map((feature, index) => (
-          <li key={index} className="flex items-center text-gray-600">
-            <svg className="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-            </svg>
-            {feature}
-          </li>
-        ))}
-      </ul>
-      <a
-        href="#contact"
-        className={`block w-full py-3 px-4 rounded-lg text-center font-semibold transition-colors ${
-          isPopular
-            ? 'bg-blue-600 text-white hover:bg-blue-700'
-            : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+      
+      <div className="mb-6 flex-1">
+        <p className="text-sm text-center mb-6" style={{ color: isSelected ? 'rgba(255,255,255,0.9)' : '#00264C' }}>
+          All the features you need to keep your personal files safe, accessible, and easy to share.
+        </p>
+        
+        <ul className="space-y-3">
+          {features.map((feature, index) => (
+            <li key={index} className="flex items-center text-sm" style={{ color: isSelected ? 'white' : '#00264C' }}>
+              <svg className="w-4 h-4 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: isSelected ? 'white' : '#00264C' }}>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+              {feature}
+            </li>
+          ))}
+        </ul>
+      </div>
+      
+      <button
+        className={`w-full py-3 px-6 rounded-full text-center font-semibold transition-all duration-300 mt-auto ${
+          isSelected
+            ? 'bg-white hover:bg-gray-100 text-[#00264C]' 
+            : 'border-2 border-[#00264C] hover:bg-[#00264C] hover:text-white text-[#00264C]'
         }`}
       >
-        Get Started
-      </a>
+        Start Free Trial
+      </button>
     </div>
   );
 }
 
 export default function PricingSection() {
+  const [selectedPlan, setSelectedPlan] = useState(1); // Default to middle card
+
   return (
-    <section id="pricing" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-6">
+    <section 
+      id="pricing" 
+      className="py-20 relative overflow-hidden" 
+      style={{ backgroundColor: '#5DD9FF' }}
+    >
+      {/* Vertical Lines Background */}
+      <div className="absolute inset-0 flex justify-around">
+        {[...Array(12)].map((_, index) => (
+          <div 
+            key={index} 
+            className="w-px h-full bg-white opacity-50"
+          />
+        ))}
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple & Flexible Pricing</h2>
-          <p className="text-gray-600 text-lg">
-            Choose the perfect plan for your business needs
+          <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: '#00264C' }}>
+            Simple & flexible pricing built for everyone
+          </h2>
+          <p className="text-lg" style={{ color: '#00264C', opacity: 0.8 }}>
+            Start with 14-day free trial. No credit card needed. Cancel at anytime.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {plans.map((plan, index) => (
-            <PriceCard key={index} {...plan} />
+            <PriceCard 
+              key={index} 
+              {...plan} 
+              isSelected={selectedPlan === index}
+              onClick={() => setSelectedPlan(index)}
+            />
           ))}
         </div>
       </div>

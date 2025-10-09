@@ -678,3 +678,19 @@ h1, h2, h3, h4, h5, h6, .display-1, .display-2, .display-3, .display-4, .display
     animation: none;
   }
 }
+@keyframes blink-faded {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5); /* Starts small */
+  }
+  50% {
+    opacity: 0.5; /* Fades in to 50% opacity */
+    transform: scale(1); /* Grows to full size */
+  }
+}
+
+.animate-blink-faded {
+  animation-name: blink-faded;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}

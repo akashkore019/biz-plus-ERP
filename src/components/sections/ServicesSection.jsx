@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import backgroundImage from "../../assets/images/service-bg.png";
 
 const services = [
   { title: "Reports & Analytics", description: "Get smart insights with visual dashboards and KPIs." },
@@ -15,105 +16,111 @@ export default function ServicesSection() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      nextService();
+      setCurrentIndex((prev) => (prev + 1) % services.length);
     }, autoScrollInterval);
     return () => clearInterval(timer);
   }, [currentIndex]);
 
-  const nextService = () => setCurrentIndex((prev) => (prev + 1) % services.length);
-  const prevService = () => setCurrentIndex((prev) => (prev - 1 + services.length) % services.length);
+  const nextService = () => {
+    setCurrentIndex((prev) => (prev + 1) % services.length);
+  };
+  
+  const prevService = () => {
+    setCurrentIndex((prev) => (prev - 1 + services.length) % services.length);
+  };
 
   return (
     <section id="services" className="py-20 bg-gray-50 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="servicePattern" x="0" y="0" width="500" height="500" patternUnits="userSpaceOnUse">
-              <path d="M 0 100 L 100 100 L 100 150 L 200 150" stroke="#00264C" strokeWidth="2" fill="none" opacity="0.7" />
-              <path d="M 200 150 L 200 250 L 300 250" stroke="#00264C" strokeWidth="2" fill="none" opacity="0.7" />
-              <path d="M 300 250 L 400 250 L 400 200 L 500 200" stroke="#00264C" strokeWidth="2" fill="none" opacity="0.7" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#servicePattern)" />
-        </svg>
-      </div>
+      {/* Background Pattern - Fixed */}
+      <div
+        className="absolute inset-x-0 top-0 z-0"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundPosition: 'center top',
+          backgroundSize: '120% auto',
+          backgroundRepeat: 'no-repeat',
+          height: '120%', // Increased height to prevent cutting
+          opacity: '0.2',
+          transform: 'translateY(-5%)', // Adjusted to prevent vertical cut
+        }}
+      ></div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#01A8DB]">SERVICES</h2>
+          <h1 className="text-4xl md:text-5xl font-bold text-[#01A8DB] drop-shadow-lg">SERVICES</h1>
         </div>
 
         {/* Carousel */}
         <div className="relative flex items-center justify-center overflow-hidden max-w-7xl mx-auto">
           {/* Left & Right Buttons */}
-          <button onClick={prevService} className="absolute left-4 top-1/2 -translate-y-1/2 z-30 hover:opacity-70">
+          <button
+            onClick={prevService}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-30 hover:opacity-70 transition-opacity"
+          >
             <svg className="w-10 h-10 md:w-14 md:h-14" fill="none" stroke="#00264C" viewBox="0 0 24 24" strokeWidth="2.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
 
-          <div className="flex items-center justify-center relative w-full h-[400px]">
+          <div className="flex items-center justify-center relative w-full h-[450px] md:h-[550px]">
             <AnimatePresence>
               {services.map((service, index) => {
-                const offset = (index - currentIndex + services.length) % services.length;
+                const isCurrent = index === currentIndex;
+                const isPrev = index === (currentIndex - 1 + services.length) % services.length;
+                const isNext = index === (currentIndex + 1) % services.length;
+                
+                let xValue;
+                let scale = 0.85;
+                let opacity = 0.7;
+                let zIndex = 5;
+                let gradient;
+                let className = "rounded-3xl p-8 md:p-10 text-center backdrop-blur-md";
 
-                // Show only prev, current, next
-                if (offset > 2 && offset < services.length - 2) return null;
-
-                let scale = 0.7;
-                let opacity = 0.4;
-                let zIndex = 0;
-                let gradient = "linear-gradient(to right, rgba(255,255,255,0.3), rgba(0,38,76,0.1))";
-
-                if (offset === 0) {
+                if (isCurrent) {
+                  xValue = "0%";
                   scale = 1;
                   opacity = 1;
                   zIndex = 10;
-                  gradient = "#5dd9ff"; // Solid clean background for center card
-
-                } else if (offset === 1 || offset === services.length - 1) {
-                  scale = 0.85;
-                  opacity = 0.7;
-                  zIndex = 5;
-                  gradient = "linear-gradient(145deg, rgba(1,168,219,0.4), rgba(0,38,76,0.2))";
+                  gradient = "#5DD9FF";
+                  className += " shadow-xl border border-gray-100";
+                } else if (isPrev) {
+                  xValue = "-65%"; // Increased space
+                  gradient = "linear-gradient(to left, #5dd9ff, transparent)";
+                } else if (isNext) {
+                  xValue = "65%"; // Increased space
+                  gradient = "linear-gradient(to right, #5dd9ff, transparent)";
+                } else {
+                  return null;
                 }
-
-                // spacing magic ✨
-                const xValue =
-                  offset === 0
-                    ? 0
-                    : offset === 1
-                    ? 550 // right side spacing
-                    : offset === services.length - 1
-                    ? -550 // left side spacing
-                    : 0;
 
                 return (
                   <motion.div
                     key={index}
-                    className="absolute flex-shrink-0 w-[350px] md:w-[550px]"
+                    className="absolute flex-shrink-0 w-[300px] md:w-[550px] cursor-pointer"
+                    onClick={() => setCurrentIndex(index)}
+                    initial={{ opacity: 0, scale: 0.85 }}
                     animate={{
                       x: xValue,
-                      scale,
-                      opacity,
+                      scale: scale,
+                      opacity: opacity,
+                      zIndex: zIndex,
                     }}
                     transition={{ duration: 0.6, ease: "easeInOut" }}
-                    style={{ zIndex }}
                   >
                     <div
-                      className="rounded-3xl p-10 text-center shadow-xl backdrop-blur-md"
+                      className={`${className} flex flex-col justify-between`}
                       style={{
                         background: gradient,
                         minHeight: "350px",
-                        border: "1px solid rgba(255,255,255,0.3)",
                       }}
                     >
-                      <h3 className="text-2xl md:text-3xl font-bold mb-4 text-[#00264C]">
+                      <h3 className="text-2xl md:text-3xl font-bold pt-4 text-[#00264C]">
                         {service.title}
                       </h3>
-                      <div className="w-20 h-1 bg-[#00264C] mx-auto mb-6"></div>
-                      <p className="text-lg md:text-xl text-[#00264C]">{service.description}</p>
+                      <div className="flex-grow flex items-center justify-center">
+                        <div className="w-20 h-1 bg-[#00264C] mb-6"></div>
+                      </div>
+                      <p className="text-lg md:text-xl text-[#00264C] pb-4">{service.description}</p>
                     </div>
                   </motion.div>
                 );
@@ -121,7 +128,10 @@ export default function ServicesSection() {
             </AnimatePresence>
           </div>
 
-          <button onClick={nextService} className="absolute right-4 top-1/2 -translate-y-1/2 z-30 hover:opacity-70">
+          <button
+            onClick={nextService}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-30 hover:opacity-70 transition-opacity"
+          >
             <svg className="w-10 h-10 md:w-14 md:h-14" fill="none" stroke="#00264C" viewBox="0 0 24 24" strokeWidth="2.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
@@ -135,7 +145,8 @@ export default function ServicesSection() {
               key={index}
               className={`w-3 h-3 rounded-full ${
                 index === currentIndex ? "bg-[#00264C]" : "bg-gray-300"
-              } transition-all duration-300`}
+              } transition-all duration-300 cursor-pointer`}
+              onClick={() => setCurrentIndex(index)}
             ></div>
           ))}
         </div>

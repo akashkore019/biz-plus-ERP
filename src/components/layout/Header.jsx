@@ -36,39 +36,35 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <a
             href="#home"
-            className={`text-xl font-bold ${isScrolled ? 'text-gray-900' : 'text-white'
+            className={`no-underline hover:no-underline text-xl font-bold ${isScrolled ? 'text-gray-900' : 'text-white'
               }`}
             onClick={(e) => {
               e.preventDefault();
               scrollToSection('home');
             }}
           >
-            BizPlus
+  BizPlus<span className="font-bold text-blue-900"> ERP</span>
           </a>
+{/* Desktop Navigation */}
+<nav className="hidden md:flex items-center space-x-8">
+  {['home', 'about', 'services', 'pricing', 'contact'].map((item) => (
+    <a
+      key={item}
+      href={`#${item}`}
+      className="relative group no-underline text-blue-900 font-bold hover:text-blue-600 transition-colors"
+      onClick={(e) => {
+        e.preventDefault();
+        scrollToSection(item);
+      }}
+    >
+      {item.charAt(0).toUpperCase() + item.slice(1)}
+      <span
+        className="absolute left-0 -bottom-1 h-[2px] w-0 bg-blue-500 transition-all duration-300 group-hover:w-full"
+      ></span>
+    </a>
+  ))}
+</nav>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            {['home', 'about', 'services', 'pricing', 'contact'].map((item) => (
-              <a
-                key={item}
-                href={`#${item}`}
-                className={`relative group no-underline ${isScrolled
-                    ? 'text-gray-700 hover:text-blue-600'
-                    : 'text-white hover:text-blue-100'
-                  } transition-colors`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(item);
-                }}
-              >
-                {item.charAt(0).toUpperCase() + item.slice(1)}
-                <span
-                  className="absolute left-0 -bottom-1 h-[2px] w-0 bg-blue-500 transition-all duration-300 group-hover:w-full"
-                ></span>
-              </a>
-
-            ))}
-          </nav>
 
           {/* Mobile Menu Button */}
           <button

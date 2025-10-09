@@ -24,40 +24,48 @@ export default function ServicesSection() {
   const nextService = () => {
     setCurrentIndex((prev) => (prev + 1) % services.length);
   };
-  
+
   const prevService = () => {
     setCurrentIndex((prev) => (prev - 1 + services.length) % services.length);
   };
 
   return (
     <section id="services" className="py-20 bg-gray-50 relative overflow-hidden">
-      {/* Background Pattern - Fixed */}
+      {/* Background Pattern */}
       <div
         className="absolute inset-x-0 top-0 z-0"
         style={{
           backgroundImage: `url(${backgroundImage})`,
-          backgroundPosition: 'center top',
-          backgroundSize: '120% auto',
-          backgroundRepeat: 'no-repeat',
-          height: '120%', // Increased height to prevent cutting
-          opacity: '0.2',
-          transform: 'translateY(-5%)', // Adjusted to prevent vertical cut
+          backgroundPosition: "center top",
+          backgroundSize: "120% auto",
+          backgroundRepeat: "no-repeat",
+          height: "120%",
+          opacity: "0.2",
+          transform: "translateY(-5%)",
         }}
       ></div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-[#01A8DB] drop-shadow-lg">SERVICES</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-[#01A8DB] drop-shadow-lg">
+            SERVICES
+          </h1>
         </div>
 
         {/* Carousel */}
-        <div className="relative flex items-center justify-center overflow-hidden max-w-7xl mx-auto">
-          {/* Left & Right Buttons */}
+        <div className="relative flex items-center justify-center overflow-hidden mx-auto">
+          {/* Left Button */}
           <button
             onClick={prevService}
             className="absolute left-4 top-1/2 -translate-y-1/2 z-30 hover:opacity-70 transition-opacity"
           >
-            <svg className="w-10 h-10 md:w-14 md:h-14" fill="none" stroke="#00264C" viewBox="0 0 24 24" strokeWidth="2.5">
+            <svg
+              className="w-10 h-10 md:w-14 md:h-14"
+              fill="none"
+              stroke="#00264C"
+              viewBox="0 0 24 24"
+              strokeWidth="2.5"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
@@ -68,13 +76,13 @@ export default function ServicesSection() {
                 const isCurrent = index === currentIndex;
                 const isPrev = index === (currentIndex - 1 + services.length) % services.length;
                 const isNext = index === (currentIndex + 1) % services.length;
-                
+
                 let xValue;
                 let scale = 0.85;
                 let opacity = 0.7;
                 let zIndex = 5;
                 let gradient;
-                let className = "rounded-3xl p-8 md:p-10 text-center backdrop-blur-md";
+                let className = "rounded-3xl p-8 md:p-10 text-center backdrop-blur-md transition-all duration-500";
 
                 if (isCurrent) {
                   xValue = "0%";
@@ -82,12 +90,18 @@ export default function ServicesSection() {
                   opacity = 1;
                   zIndex = 10;
                   gradient = "#5DD9FF";
-                  className += " shadow-xl border border-gray-100";
+                  className += " shadow-2xl border border-gray-100";
                 } else if (isPrev) {
-                  xValue = "-65%"; // Increased space
+                  xValue = "-100%"; // More left
+                  scale = 0.85;
+                  opacity = 0.6;
+                  zIndex = 5;
                   gradient = "linear-gradient(to left, #5dd9ff, transparent)";
                 } else if (isNext) {
-                  xValue = "65%"; // Increased space
+                  xValue = "100%"; // More right
+                  scale = 0.85;
+                  opacity = 0.6;
+                  zIndex = 5;
                   gradient = "linear-gradient(to right, #5dd9ff, transparent)";
                 } else {
                   return null;
@@ -96,7 +110,7 @@ export default function ServicesSection() {
                 return (
                   <motion.div
                     key={index}
-                    className="absolute flex-shrink-0 w-[300px] md:w-[550px] cursor-pointer"
+                    className="absolute flex-shrink-0 w-[300px] md:w-[500px] cursor-pointer"
                     onClick={() => setCurrentIndex(index)}
                     initial={{ opacity: 0, scale: 0.85 }}
                     animate={{
@@ -120,7 +134,9 @@ export default function ServicesSection() {
                       <div className="flex-grow flex items-center justify-center">
                         <div className="w-20 h-1 bg-[#00264C] mb-6"></div>
                       </div>
-                      <p className="text-lg md:text-xl text-[#00264C] pb-4">{service.description}</p>
+                      <p className="text-lg md:text-xl text-[#00264C] pb-4">
+                        {service.description}
+                      </p>
                     </div>
                   </motion.div>
                 );
@@ -128,11 +144,18 @@ export default function ServicesSection() {
             </AnimatePresence>
           </div>
 
+          {/* Right Button */}
           <button
             onClick={nextService}
             className="absolute right-4 top-1/2 -translate-y-1/2 z-30 hover:opacity-70 transition-opacity"
           >
-            <svg className="w-10 h-10 md:w-14 md:h-14" fill="none" stroke="#00264C" viewBox="0 0 24 24" strokeWidth="2.5">
+            <svg
+              className="w-10 h-10 md:w-14 md:h-14"
+              fill="none"
+              stroke="#00264C"
+              viewBox="0 0 24 24"
+              strokeWidth="2.5"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </button>

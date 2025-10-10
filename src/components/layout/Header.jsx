@@ -35,16 +35,16 @@ export default function Header() {
     setIsMenuOpen(false);
   };
 
+  // Use Tailwind classes for bg + responsive rounding instead of inline borderRadius.
   const headerClass = showBox
-    ? 'fixed top-0 left-4 right-4 z-50 transition-all duration-300 shadow-md py-3'
-    : 'fixed top-0 left-4 right-4 z-50 transition-all duration-300 bg-transparent shadow-none py-3';
+    ? 'fixed top-0 left-4 right-4 z-50 transition-all duration-300 shadow-md py-3 bg-[#5DD9FF] md:rounded-b-2xl rounded-none'
+    : 'fixed top-0 left-4 right-4 z-50 transition-all duration-300 bg-transparent shadow-none py-3 rounded-none';
 
-  const headerStyle = showBox
-    ? { borderRadius: '0 0 2rem 2rem', backgroundColor: '#5DD9FF' }
-    : { borderRadius: '0', backgroundColor: 'transparent', boxShadow: 'none' };
+  // Height of blue bar for mobile menu (adjust if needed)
+  const mobileBarHeight = 56;
 
   return (
-    <header className={headerClass} style={headerStyle}>
+    <header className={headerClass}>
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between">
           {/* Logo only, no text */}
@@ -82,7 +82,7 @@ export default function Header() {
             ))}
             {/* Get Demo Button */}
             <button
-              className="border border-white text-white bg-transparent px-4 py-2 rounded-full ml-2 font-bold transition-colors hover:bg-white hover:text-[#043873]"
+              className="border border-[#043873] text-[#043873] bg-transparent px-4 py-2 rounded-full ml-2 font-bold transition-colors hover:bg-[#043873] hover:text-white"
               onClick={() => window.location.href = '#get-demo'}
             >
               Get Demo
@@ -99,7 +99,8 @@ export default function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-600"
+            className="md:hidden p-2 text-gray-600 bg-transparent border-none"
+            style={{ outline: 'none', boxShadow: 'none' }}
           >
             <svg
               className="h-6 w-6"
@@ -121,8 +122,53 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <nav className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg rounded-b-2xl py-4 z-40">
-            <div className="flex flex-col items-center space-y-2">
+          <div className="fixed inset-0 z-50">
+            {/* Blue header bar with logo and close icon
+                remove corner rounding on small screens, keep on md+ */}
+            <div
+              className="flex items-center justify-between bg-[#5DD9FF] px-6 py-3 md:rounded-b-2xl rounded-none"
+              style={{
+                position: 'relative',
+                zIndex: 2,
+                height: `${mobileBarHeight}px`,
+              }}
+            >
+              <img
+                src="src/assets/images/logo.png"
+                alt="BizPlus Logo"
+                className="h-8 w-auto"
+              />
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="p-2 text-[#043873] bg-transparent border-none"
+                style={{ outline: 'none', boxShadow: 'none' }}
+              >
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            {/* Navigation popup */}
+            <nav
+              className="bg-white shadow-lg rounded-b-2xl py-4 flex flex-col items-center space-y-2"
+              style={{
+                position: 'absolute',
+                top: `${mobileBarHeight}px`,
+                left: 0,
+                right: 0,
+                zIndex: 1,
+                maxHeight: `calc(100vh - ${mobileBarHeight}px)`,
+                overflowY: 'auto',
+              }}
+            >
               {NAV_ITEMS.map((item) => (
                 <a
                   key={item.id}
@@ -138,7 +184,7 @@ export default function Header() {
                 </a>
               ))}
               <button
-                className="border border-white text-white bg-transparent px-4 py-2 rounded-full font-bold transition-colors hover:bg-[#043873] hover:text-white"
+                className="border border-[#043873] text-[#043873] bg-transparent px-4 py-2 rounded-full font-bold transition-colors hover:bg-[#043873] hover:text-white"
                 onClick={() => window.location.href = '#get-demo'}
               >
                 Get Demo
@@ -149,8 +195,8 @@ export default function Header() {
               >
                 Buy Now
               </button>
-            </div>
-          </nav>
+            </nav>
+          </div>
         )}
       </div>
     </header>

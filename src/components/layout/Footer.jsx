@@ -5,7 +5,7 @@ export default function Footer() {
     <footer
       className="pt-12 pb-6"
       style={{
-        background: 'linear-gradient(to bottom, #55BEE2 0%, #00264C 88%,)',
+        background: 'linear-gradient(to bottom, #55BEE2 0%, #00264C 78%, #00264C 100%)',
       }}
     >
       <div className="container mx-auto px-4">
@@ -36,6 +36,7 @@ export default function Footer() {
           {/* Columns */}
           <div className="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
             <div className="flex flex-col items-start">
+              <div className="font-semibold mb-3 text-lg text-white">Product</div>
               <ul className="space-y-2 w-full">
                 <li><a href="#" className="text-white no-underline">Features</a></li>
                 <li><a href="#" className="text-white no-underline">Pricing</a></li>
@@ -43,6 +44,7 @@ export default function Footer() {
               </ul>
             </div>
             <div className="flex flex-col items-start">
+              <div className="font-semibold mb-3 text-lg text-white">Work</div>
               <ul className="space-y-2 w-full">
                 <li><a href="#" className="text-white no-underline">Our Portfolio</a></li>
                 <li><a href="#" className="text-white no-underline">Lastest Work</a></li>
@@ -50,6 +52,7 @@ export default function Footer() {
               </ul>
             </div>
             <div className="flex flex-col items-start">
+              <div className="font-semibold mb-3 text-lg text-white">Stuff</div>
               <ul className="space-y-2 w-full">
                 <li><a href="#" className="text-white no-underline">Privacy</a></li>
                 <li><a href="#" className="text-white no-underline">Support</a></li>
@@ -58,6 +61,7 @@ export default function Footer() {
               </ul>
             </div>
             <div className="flex flex-col items-start">
+              <div className="font-semibold mb-3 text-lg text-white">Product</div>
               <ul className="space-y-2 w-full">
                 <li><a href="#" className="text-white no-underline">About Us</a></li>
                 <li><a href="#" className="text-white no-underline">Blog</a></li>

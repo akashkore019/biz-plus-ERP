@@ -1,113 +1,158 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 
-export default function TaglineSection() {
-  // Responsive grid: more dots on larger screens, fewer on small screens
-  const [grid, setGrid] = React.useState({ rows: 12, cols: 36 });
-  const [imgSize, setImgSize] = React.useState({ width: 440, height: 220, top: -20 });
+const NAV_ITEMS = [
+  { id: 'home', label: 'Home' },
+  { id: 'about', label: 'About Us' },
+  { id: 'services', label: 'Services' },
+  { id: 'pricing', label: 'Pricing' },
+  { id: 'contact', label: 'Contact Us' },
+  { id: 'blogs', label: 'Blogs' },
+];
 
-  React.useEffect(() => {
-    function updateGridAndImage() {
-      const width = window.innerWidth;
-      if (width < 640) {
-        setGrid({ rows: 8, cols: 16 });
-        setImgSize({ width: 260, height: 120, top: -10 });
-      } else if (width < 1024) {
-        setGrid({ rows: 10, cols: 24 });
-        setImgSize({ width: 340, height: 170, top: -15 });
-      } else {
-        setGrid({ rows: 12, cols: 36 });
-        setImgSize({ width: 440, height: 220, top: -20 });
-      }
-    }
-    updateGridAndImage();
-    window.addEventListener("resize", updateGridAndImage);
-    return () => window.removeEventListener("resize", updateGridAndImage);
+export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showBox, setShowBox] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBox(window.scrollY > 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const { rows, cols } = grid;
-  const dotRadius = 1.5;
-  const svgWidth = 100 * cols;
-  const svgHeight = 24 * rows;
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const header = document.querySelector('header');
+      const headerOffset = header ? header.offsetHeight : 0;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
+    setIsMenuOpen(false);
+  };
+
+  const headerClass = showBox
+    ? 'fixed top-0 left-4 right-4 z-50 transition-all duration-300 shadow-md py-3'
+    : 'fixed top-0 left-4 right-4 z-50 transition-all duration-300 bg-transparent shadow-none py-3';
+
+  const headerStyle = showBox
+    ? { borderRadius: '0 0 2rem 2rem', backgroundColor: '#5DD9FF' }
+    : { borderRadius: '0', backgroundColor: 'transparent', boxShadow: 'none' };
 
   return (
-    <section
-      className="relative flex items-center justify-center min-h-[320px] py-8"
-      style={{ backgroundColor: "#00264C" }}
-    >
-      {/* Brush image as background, behind everything */}
-      <img
-        src="src/assets/images/Vector.png"
-        alt="ERP background"
-        className="absolute left-1/2"
-        style={{
-          top: `${imgSize.top}px`,
-          transform: "translateX(-50%)",
-          width: `${imgSize.width}px`,
-          height: `${imgSize.height}px`,
-          objectFit: "contain",
-          pointerEvents: "none",
-          userSelect: "none",
-          zIndex: 1,
-          opacity: 1
-        }}
-      />
-
-      {/* Dots Grid Background */}
-      <div className="absolute inset-0 pointer-events-none z-0 w-full h-full">
-        <svg
-          width="100%"
-          height="100%"
-          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          preserveAspectRatio="none"
-          style={{ display: "block" }}
-        >
-          {Array.from({ length: rows }).map((_, row) =>
-            Array.from({ length: cols }).map((_, col) => {
-              const centerRow = (rows - 1) / 2;
-              const centerCol = (cols - 1) / 2;
-              const dist = Math.sqrt(
-                Math.pow(row - centerRow, 2) + Math.pow(col - centerCol, 2)
-              );
-              const maxDist = Math.sqrt(Math.pow(centerRow, 2) + Math.pow(centerCol, 2));
-              const opacity = 0.7 - (dist / maxDist) * 0.6;
-              return (
-                <circle
-                  key={`${row}-${col}`}
-                  cx={col * (svgWidth / (cols - 1))}
-                  cy={row * (svgHeight / (rows - 1))}
-                  r={dotRadius}
-                  fill="#5DD9FF"
-                  opacity={opacity}
-                />
-              );
-            })
-          )}
-        </svg>
-      </div>
-
-      {/* Content */}
-      <div className="relative z-20 w-full flex flex-col items-center justify-center">
-        {/* Logo & Tagline */}
-        <div className="mb-8 flex flex-row items-center gap-1">
-          <span className="text-white text-3xl md:text-4xl font-bold tracking-wide">BIZPLUS</span>
-          <span
-            className="font-bold text-3xl md:text-4xl px-2"
-            style={{
-              color: "#00264C",
-              fontFamily: "inherit",
-              letterSpacing: "2px",
-              zIndex: 1,
-              position: "relative"
+    <header className={headerClass} style={headerStyle}>
+      <div className="container mx-auto px-6">
+        <div className="flex items-center justify-between">
+          {/* Logo only, no text */}
+          <a
+            href="#home"
+            className="flex items-center"
+            style={{ textDecoration: 'none' }}
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('home');
             }}
           >
-            ERP
-          </span>
+            <img
+              src="src/assets/images/logo.png"
+              alt="BizPlus Logo"
+              className="h-8 w-auto mr-2"
+            />
+          </a>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-6">
+            {NAV_ITEMS.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className="font-bold px-2 py-1 transition-colors text-[#043873] hover:text-blue-600"
+                style={{ textDecoration: 'none' }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(item.id);
+                }}
+              >
+                {item.label}
+              </a>
+            ))}
+            {/* Get Demo Button */}
+            <button
+              className="border border-white text-white bg-transparent px-4 py-2 rounded-full ml-2 font-bold transition-colors hover:bg-white hover:text-[#043873]"
+              onClick={() => window.location.href = '#get-demo'}
+            >
+              Get Demo
+            </button>
+            {/* Buy Now Button */}
+            <button
+              className="bg-[#00264C] text-white px-4 py-2 rounded-full ml-2 font-bold hover:bg-blue-900 transition"
+              onClick={() => window.location.href = '#buy-now'}
+            >
+              Buy Now
+            </button>
+          </nav>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-600"
+          >
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              {isMenuOpen ? (
+                <path d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </div>
-        <p className="text-white text-center text-xl md:text-2xl max-w-3xl font-medium leading-relaxed">
-          Are you planning to update Startup? We are! Here is the changelog of changes we’ve made after the release.<br />
-          Thanks our clients who helped us to improve our product.
-        </p>
+
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <nav className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg rounded-b-2xl py-4 z-40">
+            <div className="flex flex-col items-center space-y-2">
+              {NAV_ITEMS.map((item) => (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className="font-bold px-2 py-2 transition-colors text-[#043873] hover:text-blue-600 text-center"
+                  style={{ textDecoration: 'none' }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection(item.id);
+                  }}
+                >
+                  {item.label}
+                </a>
+              ))}
+              <button
+                className="border border-white text-white bg-transparent px-4 py-2 rounded-full font-bold transition-colors hover:bg-[#043873] hover:text-white"
+                onClick={() => window.location.href = '#get-demo'}
+              >
+                Get Demo
+              </button>
+              <button
+                className="bg-[#00264C] text-white px-4 py-2 rounded-full font-bold hover:bg-blue-900 transition"
+                onClick={() => window.location.href = '#buy-now'}
+              >
+                Buy Now
+              </button>
+            </div>
+          </nav>
+        )}
       </div>
-    </section>
+    </header>
   );
 }

@@ -25,14 +25,16 @@ export default function HeroSection() {
           }
           .animate-rotate-smoothly {
             animation: rotate-smoothly 20s linear infinite;
+            transform-origin: center center;
           }
         `}
       </style>
 
-       <section
+      <section
         id="home"
         className="bg-gradient-to-r from-[#5dd9ff] to-[#b3eaff] overflow-hidden relative min-h-screen flex items-center"
-      >        <BlinkingCircles />
+      >
+        <BlinkingCircles />
 
         <div className="mx-auto px-6 md:px-12 lg:px-16">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
@@ -54,25 +56,23 @@ export default function HeroSection() {
                 and make smarter decisions anytime, anywhere.A modern cloud enterprise solution to streamline operations, improve productivity, 
                 and make smarter decision
               </p>
-             <div className="flex space-x-4">
-  <a
-    href="#contact"
-        style={{ color: '#043873', borderColor: 'white' }}
+              <div className="flex space-x-4">
+                <a
+                  href="#contact"
+                  style={{ color: '#043873', borderColor: 'white' }}
+                  className="bg-white text-blue-600 px-8 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-all shadow-lg no-underline hover:no-underline"
+                >
+                  Get Started
+                </a>
 
-    className="bg-white text-blue-600 px-8 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-all shadow-lg no-underline hover:no-underline"
-  >
-    Get Started
-  </a>
-
-  <a
-    href="#pricing"
-    style={{ color: '#043873', borderColor: 'white' }}
-    className="border-2 border-white  px-8 py-2 rounded-lg font-semibold hover:bg-white/20 transition-all shadow-lg no-underline hover:no-underline"
-  >
-    View Pricing
-  </a>
-</div>
-
+                <a
+                  href="#pricing"
+                  style={{ color: '#043873', borderColor: 'white' }}
+                  className="border-2 border-white  px-8 py-2 rounded-lg font-semibold hover:bg-white/20 transition-all shadow-lg no-underline hover:no-underline"
+                >
+                  View Pricing
+                </a>
+              </div>
             </motion.div>
 
             {/* RIGHT IMAGE CONTENT */}
@@ -85,18 +85,18 @@ export default function HeroSection() {
               {/* Soft blur background */}
               <div className="absolute -left-32 top-20 w-[500px] h-[500px] rounded-full bg-[#009adf]/40 blur-3xl -z-20"></div>
 
-              {/* Rotating background circle (behind) */}
-              <img
-                src={heroImageSrc}
-                alt="Service Circle"
-                className="absolute animate-rotate-smoothly"
-                style={{
-                  top: '82px',
-                  left: '-112px',
-                  width: '503px',
-                  height: '620px',
-                }}
-              />
+              {/* Rotating background circle (always square and centered) */}
+              <div className="relative flex items-center justify-center w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] md:w-[320px] md:h-[320px] lg:w-[400px] lg:h-[400px] xl:w-[500px] xl:h-[500px]">
+                <img
+                  src={heroImageSrc}
+                  alt="Service Circle"
+                  className="w-full h-full animate-rotate-smoothly"
+                  style={{
+                    objectFit: 'contain',
+                    aspectRatio: '1 / 1',
+                  }}
+                />
+              </div>
 
               {/* Dashboard image (in front) */}
               <div className="relative w-[150%] overflow-hidden -mr-[720px]" style={{ marginTop: '200px', zIndex: 5 }}>

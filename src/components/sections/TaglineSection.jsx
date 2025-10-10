@@ -35,22 +35,53 @@ export default function TaglineSection() {
       style={{ backgroundColor: "#00264C" }}
     >
       {/* Brush image as background, behind everything */}
-      <img
-        src="src/assets/images/Vector.png"
-        alt="ERP background"
+      <div
         className="absolute left-1/2"
         style={{
           top: `${imgSize.top}px`,
           transform: "translateX(-50%)",
           width: `${imgSize.width}px`,
           height: `${imgSize.height}px`,
-          objectFit: "contain",
+          zIndex: 1,
           pointerEvents: "none",
           userSelect: "none",
-          zIndex: 1,
-          opacity: 1
         }}
-      />
+      >
+        <img
+          src="src/assets/images/Vector.png"
+          alt="ERP background"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            display: "block",
+          }}
+        />
+        {/* Centered text over image */}
+        <div
+          className="absolute left-1/2 top-1/2 flex flex-row items-center"
+          style={{
+            transform: "translate(-50%, -50%)",
+            width: "100%",
+            justifyContent: "center",
+            zIndex: 2,
+          }}
+        >
+          <span className="text-white text-3xl font-bold tracking-wide">BIZPLUS</span>
+          <span
+            className="font-bold text-3xl px-2"
+            style={{
+              color: "#00264C",
+              fontFamily: "inherit",
+              letterSpacing: "2px",
+              position: "relative",
+              marginLeft: "8px"
+            }}
+          >
+            ERP
+          </span>
+        </div>
+      </div>
 
       {/* Dots Grid Background */}
       <div className="absolute inset-0 pointer-events-none z-0 w-full h-full">
@@ -85,24 +116,8 @@ export default function TaglineSection() {
         </svg>
       </div>
 
-      {/* Content */}
-      <div className="relative z-20 w-full flex flex-col items-center justify-center">
-        {/* Logo & Tagline */}
-        <div className="mb-8 flex flex-row items-center gap-1">
-          <span className="text-white text-3xl md:text-4xl font-bold tracking-wide">BIZPLUS</span>
-          <span
-            className="font-bold text-3xl md:text-4xl px-2"
-            style={{
-              color: "#00264C",
-              fontFamily: "inherit",
-              letterSpacing: "2px",
-              zIndex: 1,
-              position: "relative"
-            }}
-          >
-            ERP
-          </span>
-        </div>
+      {/* Tagline Content */}
+      <div className="relative z-20 w-full flex flex-col items-center justify-center mt-[180px]">
         <p className="text-white text-center text-xl md:text-2xl max-w-3xl font-medium leading-relaxed">
           Are you planning to update Startup? We are! Here is the changelog of changes we’ve made after the release.<br />
           Thanks our clients who helped us to improve our product.

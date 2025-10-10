@@ -38,10 +38,10 @@ const App = () => {
         {`
           @keyframes marquee {
             0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } 
+            100% { transform: translateX(-50%); }
           }
           .marquee-track {
-            animation: marquee 40s linear infinite;
+            animation: marquee 60s linear infinite;
             will-change: transform;
           }
           .fade-mask {

@@ -10,7 +10,7 @@ const CLIENT_LOGOS = [
 ];
 
 const ClientMarquee = ({ logos }) => {
-  const duplicatedLogos = [...logos, ...logos];
+  const duplicatedLogos = [...logos, ...logos, ...logos];
 
   return (
     <div className="flex marquee-track w-[200%] items-center h-full">

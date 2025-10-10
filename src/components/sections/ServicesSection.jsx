@@ -1,6 +1,168 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import backgroundImage from "../../assets/images/service-bg.png";
+
+// Blinking gradient circles background (center #5DD9FF, edge white, transparent border)
+const BLINK_CIRCLE_COUNT = 5;
+const BLINK_DURATION = 3; // seconds
+
+function BlinkingCircles() {
+  const [circles, setCircles] = useState(
+    Array.from({ length: BLINK_CIRCLE_COUNT }, (_, i) => ({
+      id: i,
+      size: Math.random() * 180 + 180, // 180px to 360px (bigger circles)
+      top: Math.random() * 80,
+      left: Math.random() * 80,
+      visible: false,
+      delay: Math.random() * BLINK_DURATION,
+    }))
+  );
+
+  useEffect(() => {
+    const timers = circles.map((circle, idx) => {
+      const blink = () => {
+        setCircles((prev) =>
+          prev.map((c, i) =>
+            i === idx
+              ? { ...c, visible: true }
+              : c
+          )
+        );
+        setTimeout(() => {
+          setCircles((prev) =>
+            prev.map((c, i) =>
+              i === idx
+                ? {
+                    ...c,
+                    visible: false,
+                    size: Math.random() * 180 + 180, // 180px to 360px
+                    top: Math.random() * 80,
+                    left: Math.random() * 80,
+                  }
+                : c
+            )
+          );
+        }, BLINK_DURATION * 1000);
+      };
+      const interval = setInterval(blink, BLINK_DURATION * 2000 + idx * 500);
+      setTimeout(blink, circle.delay * 1000);
+      return interval;
+    });
+    return () => timers.forEach(clearInterval);
+    // eslint-disable-next-line
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-0">
+      {circles.map((circle) => (
+        <div
+          key={circle.id}
+          style={{
+            position: "absolute",
+            width: `${circle.size}px`,
+            height: `${circle.size}px`,
+            top: `${circle.top}%`,
+            left: `${circle.left}%`,
+            background: `radial-gradient(circle, #5DD9FF 0%, white 60%, transparent 100%)`,
+            opacity: circle.visible ? 0.45 : 0,
+            borderRadius: "50%",
+            transition: `opacity ${BLINK_DURATION}s cubic-bezier(.4,0,.2,1)`,
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+// Animated grid squares with blinking accent
+function AnimatedGridSquares() {
+  const totalRows = 6;
+  const totalCols = 10;
+  const totalSquares = totalRows * totalCols;
+  const accentCount = 4;
+
+  // Store accent indexes and trigger blink
+  const [accentIndexes, setAccentIndexes] = useState([24, 15, 36, 47]);
+  const [blink, setBlink] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Pick random accent squares
+      const newIndexes = [];
+      while (newIndexes.length < accentCount) {
+        const idx = Math.floor(Math.random() * totalSquares);
+        if (!newIndexes.includes(idx)) newIndexes.push(idx);
+      }
+      setBlink(false);
+      setTimeout(() => {
+        setAccentIndexes(newIndexes);
+        setBlink(true);
+      }, 200); // short fade out before new accent
+    }, 1800);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Accent colors for gradient borders
+ const accentColors = [
+    "#00264C",
+    "#23406A",
+    "#3B5A8C",
+    "#4C6CA3",
+    "#5DD9FF",
+    "#A1B8D8",
+    "#B3C7E6",
+    "#D6E6F2",
+    "#7A90B4",
+    "#405A7F",
+  ];
+
+  return (
+    <svg
+      width="100%"
+      height="100%"
+      viewBox="0 0 1000 640"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ position: "absolute", left: 0, top: 0, width: "100%", height: "100%" }}
+    >
+      <defs>
+        <linearGradient id="borderBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#5DD9FF" />
+          <stop offset="100%" stopColor="#B388FF" />
+        </linearGradient>
+        <linearGradient id="borderPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#B388FF" />
+          <stop offset="100%" stopColor="#5DD9FF" />
+        </linearGradient>
+      </defs>
+      {[...Array(totalRows)].map((_, row) =>
+        [...Array(totalCols)].map((_, col) => {
+          const idx = row * totalCols + col;
+          const accent = accentIndexes.includes(idx);
+          const color = accent ? accentColors[idx % accentColors.length] : "#f3f6fa";
+          return (
+            <rect
+              key={`sq-${row}-${col}`}
+              x={col * 100 + 50}
+              y={row * 100 + 40}
+              rx="24"
+              ry="24"
+              width="90"
+              height="90"
+              fill="#fff"
+              stroke={color}
+              strokeWidth={accent ? "2.5" : "1"}
+              opacity={accent ? (blink ? "1" : "0.3") : "0.7"}
+              style={{
+                transition: "stroke 0.8s, opacity 0.5s",
+              }}
+            />
+          );
+        })
+      )}
+    </svg>
+  );
+}
 
 const services = [
   { title: "Reports & Analytics", description: "Get smart insights with visual dashboards and KPIs." },
@@ -30,24 +192,24 @@ export default function ServicesSection() {
   };
 
   return (
-    <section id="services" className="py-20 bg-gray-50 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div
-        className="absolute inset-x-0 top-0 z-0"
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundPosition: "center top",
-          backgroundSize: "120% auto",
-          backgroundRepeat: "no-repeat",
-          height: "120%",
-          opacity: "0.2",
-          transform: "translateY(-5%)",
-        }}
-      ></div>
+    <section
+      id="services"
+      className="py-20 relative overflow-hidden"
+      style={{
+        background: "#fff", // white base
+      }}
+    >
+      {/* Animated Grid Pattern Background with Gradient Borders */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
+        <AnimatedGridSquares />
+      </div>
+
+      {/* Blinking Gradient Circles Overlay */}
+      <BlinkingCircles />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-[#01A8DB] drop-shadow-lg">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#5DD9FF] drop-shadow-lg">
             SERVICES
           </h1>
         </div>
@@ -92,13 +254,13 @@ export default function ServicesSection() {
                   gradient = "#5DD9FF";
                   className += " shadow-2xl border border-gray-100";
                 } else if (isPrev) {
-                  xValue = "-100%"; // More left
+                  xValue = "-100%";
                   scale = 0.85;
                   opacity = 0.6;
                   zIndex = 5;
                   gradient = "linear-gradient(to left, #5dd9ff, transparent)";
                 } else if (isNext) {
-                  xValue = "100%"; // More right
+                  xValue = "100%";
                   scale = 0.85;
                   opacity = 0.6;
                   zIndex = 5;
